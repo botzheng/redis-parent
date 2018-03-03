@@ -1,0 +1,3 @@
+在目录下使用：redis-server.exe redis.windows.conf
+在目录下使用：redis-cli.exe -h 127.0.0.1 -p 6379
+之后就能够正常连接与使用了。
