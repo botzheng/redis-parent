@@ -20,15 +20,15 @@ public class RedisPoolUtil {
             result = jedis.expire(key,exTime);
         } catch (Exception e) {
             log.error("setex key:{} exTime：{} error",key,exTime,e);
-            RedisPool.returnBrokenResource(jedis);
             return result;
+        } finally {   //在操作完后，无论是否异常，都要关闭redis连接池
+            RedisPool.closeRedisPool();
         }
-        RedisPool.returnResource(jedis);
         return result;
     }
 
     /**
-     *
+     * 在redis中存放信息，同时设置信息的过期时间
      * @param key
      * @param value
      * @param exTime  秒
@@ -42,13 +42,19 @@ public class RedisPoolUtil {
             result = jedis.setex(key,exTime,value);
         } catch (Exception e) {
             log.error("setex key:{} exTime：{} value:{} error",key,value,e);
-            RedisPool.returnBrokenResource(jedis);
             return result;
+        } finally {
+            RedisPool.closeRedisPool();
         }
-        RedisPool.returnResource(jedis);
         return result;
     }
 
+    /**
+     * 在redis中存放信息
+     * @param key
+     * @param value
+     * @return
+     */
     public static String set(String key,String value){
         Jedis jedis = null;
         String result = null;
@@ -57,15 +63,15 @@ public class RedisPoolUtil {
             result = jedis.set(key,value);
         } catch (Exception e) {
             log.error("set key:{} value:{} error",key,value,e);
-            RedisPool.returnBrokenResource(jedis);
             return result;
+        } finally {
+            RedisPool.closeRedisPool();
         }
-        RedisPool.returnResource(jedis);
         return result;
     }
 
     /**
-     * 获取key
+     * 从redis中获取key
      * @param key
      * @return
      */
@@ -77,15 +83,15 @@ public class RedisPoolUtil {
             result = jedis.get(key);
         } catch (Exception e) {
             log.error("get key:{} error",key,e);
-            RedisPool.returnBrokenResource(jedis);
             return result;
+        } finally {
+            RedisPool.closeRedisPool();
         }
-        RedisPool.returnResource(jedis);
         return result;
     }
 
     /**
-     * 删除key
+     * 从redis中删除key
      * @param key
      * @return
      */
@@ -97,10 +103,10 @@ public class RedisPoolUtil {
             result = jedis.del(key);
         } catch (Exception e) {
             log.error("get key:{} error",key,e);
-            RedisPool.returnBrokenResource(jedis);
             return result;
+        } finally {
+            RedisPool.closeRedisPool();
         }
-        RedisPool.returnResource(jedis);
         return result;
     }
 

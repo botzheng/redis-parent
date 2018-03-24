@@ -12,6 +12,9 @@ public class PropertiesUtil {
 
     private static Properties props;
 
+    /**
+     * 静态代码块，加载redis配置文件
+     */
     static {
         String fileName = "redis.properties";
         props = new Properties();
@@ -22,6 +25,11 @@ public class PropertiesUtil {
         }
     }
 
+    /**
+     * 获取property属性
+     * @param key
+     * @return
+     */
     public static String getProperty(String key){
         String value = props.getProperty(key.trim());
         if(StringUtils.isBlank(value)){
@@ -30,8 +38,13 @@ public class PropertiesUtil {
         return value.trim();
     }
 
+    /**
+     * 获取property中的信息，如果该信息不存在，则从默认值中获取
+     * @param key
+     * @param defaultValue
+     * @return
+     */
     public static String getProperty(String key,String defaultValue){
-
         String value = props.getProperty(key.trim());
         if(StringUtils.isBlank(value)){
             value = defaultValue;
